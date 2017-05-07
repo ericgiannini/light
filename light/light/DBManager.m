@@ -14,12 +14,12 @@
 
 //extension of DBManager() with private class files
 
-/* 
+/*
  
- There is no sense in accessing the database directly; these 
+ There is no sense in accessing the database directly; these
  properties facilate access to a copy.
  
-*/
+ */
 @property (nonatomic, strong) NSString *documentDirectory;
 
 @property (nonatomic, strong) NSString *databaseFilename;
@@ -28,9 +28,20 @@
  
  private custom class for copying the SQLitedatabase into the documents directory
  
-*/
+ */
 
 -(void)copyDatabaseIntoDocumentsDirectory;
+
+/*
+ 
+ private custom property for a mutable array for storing our results
+ 
+ */
+
+@property (nonatomic, strong) NSMutableArray *arrResults;
+
+-(void)runQuery:(const char *)query isQueryExecutable:(BOOL)queryExecutable;
+
 
 @end
 
@@ -72,7 +83,7 @@
         
         NSError *error;
         [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:&error];
-    
+        
         // Check if any error occurred during copying and display it
         if (error != nil) {
             NSLog(@"%@", [error localizedDescription]);
@@ -81,6 +92,212 @@
     }
     
 }
+
+
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+-(void)runQuery:(const char *)query isQueryExecutable:(BOOL)queryExecutable{
+    // Create a sqlite object.
+    sqlite3 *sqlite3Database;
+    
+    // Set the database file path.
+    NSString *databasePath = [self.documentsDirectory stringByAppendingPathComponent:self.databaseFilename];
+    
+    // Initialize the results array.
+    if (self.arrResults != nil) {
+        [self.arrResults removeAllObjects];
+        self.arrResults = nil;
+    }
+    self.arrResults = [[NSMutableArray alloc] init];
+    
+    // Initialize the column names array.
+    if (self.arrColumnNames != nil) {
+        [self.arrColumnNames removeAllObjects];
+        self.arrColumnNames = nil;
+    }
+    self.arrColumnNames = [[NSMutableArray alloc] init];
+    
+    
+    // Open the database.
+    BOOL openDatabaseResult = sqlite3_open([databasePath UTF8String], &sqlite3Database);
+    if(openDatabaseResult == SQLITE_OK) {
+        // Declare a sqlite3_stmt object in which will be stored the query after having been compiled into a SQLite statement.
+        sqlite3_stmt *compiledStatement;
+        
+        // Load all data from database to memory.
+        BOOL prepareStatementResult = sqlite3_prepare_v2(sqlite3Database, query, -1, &compiledStatement, NULL);
+        if(prepareStatementResult == SQLITE_OK) {
+            // Check if the query is non-executable.
+            if (!queryExecutable){
+                // In this case data must be loaded from the database.
+                
+                // Declare an array to keep the data for each fetched row.
+                NSMutableArray *arrDataRow;
+                
+                // Loop through the results and add them to the results array row by row.
+                while(sqlite3_step(compiledStatement) == SQLITE_ROW) {
+                    // Initialize the mutable array that will contain the data of a fetched row.
+                    arrDataRow = [[NSMutableArray alloc] init];
+                    
+                    // Get the total number of columns.
+                    int totalColumns = sqlite3_column_count(compiledStatement);
+                    
+                    // Go through all columns and fetch each column data.
+                    for (int i=0; i<totalColumns; i++){
+                        // Convert the column data to text (characters).
+                        char *dbDataAsChars = (char *)sqlite3_column_text(compiledStatement, i);
+                        
+                        // If there are contents in the currenct column (field) then add them to the current row array.
+                        if (dbDataAsChars != NULL) {
+                            // Convert the characters to string.
+                            [arrDataRow addObject:[NSString  stringWithUTF8String:dbDataAsChars]];
+                        }
+                        
+                        // Keep the current column name.
+                        if (self.arrColumnNames.count != totalColumns) {
+                            dbDataAsChars = (char *)sqlite3_column_name(compiledStatement, i);
+                            [self.arrColumnNames addObject:[NSString stringWithUTF8String:dbDataAsChars]];
+                        }
+                    }
+                    
+                    // Store each fetched data row in the results array, but first check if there is actually data.
+                    if (arrDataRow.count > 0) {
+                        [self.arrResults addObject:arrDataRow];
+                    }
+                }
+            }
+            else {
+                // This is the case of an executable query (insert, update, ...).
+                
+//                // Execute the query.
+//                BOOL executeQueryResults = sqlite3_step(compiledStatement);
+//                if (executeQueryResults == SQLITE_DONE) {
+                
+                    if (sqlite3_step(compiledStatement) == SQLITE_DONE) {
+                    
+                    // Keep the affected rows.
+                    self.affectedRows = sqlite3_changes(sqlite3Database);
+                    
+                    // Keep the last inserted row ID.
+                    self.lastInsertedRowID = sqlite3_last_insert_rowid(sqlite3Database);
+                }
+                else {
+                    // If could not execute the query show the error message on the debugger.
+                    NSLog(@"DB Error: %s", sqlite3_errmsg(sqlite3Database));
+                }
+            }
+        }
+        else {
+            // In the database cannot be opened then show the error message on the debugger.
+            NSLog(@"%s", sqlite3_errmsg(sqlite3Database));
+        }
+        
+        // Release the compiled statement from memory.
+        sqlite3_finalize(compiledStatement);
+        
+    }
+    
+    // Close the database.
+    sqlite3_close(sqlite3Database);
+}
+
 
 
 @end
