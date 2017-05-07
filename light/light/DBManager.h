@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface DBManager : NSObject
+@interface DBManager : NSObject 
 
 -(instancetype)initWithDatabaseFilename:(NSString *)dbFilename;
 
@@ -17,5 +17,11 @@
 @property (nonatomic) int affectedRows;
 
 @property (nonatomic) long long lastInsertedRowID;
+
+// accepts as a parameter value the executable query as an instance of NSString
+
+-(NSArray *)loadDataFromDB:(NSString *)query;
+
+-(void)executeQuery:(NSString *)query;
 
 @end
