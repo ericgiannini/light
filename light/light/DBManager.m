@@ -8,6 +8,16 @@
 
 #import "DBManager.h"
 
+#import <sqlite3.h>
+
+@interface DBManager ()
+
+//extension of DBManager() with private class files
+@property (nonatomic, strong) NSString *documentDirectory;
+@property (nonatomic, strong) NSString *databaseFilename;
+
+@end
+
 @implementation DBManager
 
 - (instancetype)initWithDatabaseFilename:(NSString *)dbFilename {
