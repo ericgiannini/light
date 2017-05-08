@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "InformationViewController.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -24,10 +25,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    
     self.tableData = [[NSMutableArray alloc] initWithObjects:@"item one", @"item two", @"item three", @"item four", @"item five", @"item six", nil];
     
     self.navigationItem.rightBarButtonItem = self.addBarButtonItem;
+    
+    self.navigationController.navigationBar.tintColor = self.navigationItem.rightBarButtonItem.tintColor;
+
     
     [_tableView reloadData];
     
@@ -35,6 +38,13 @@
     
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:YES];
+    
+//    [self.addBarButtonItem setAction:@selector(addPerson:)];
+
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -42,16 +52,26 @@
 }
 
 
+
 - (UIBarButtonItem *)addBarButtonItem {
     
     if (!_addBarButtonItem) {
-        _addBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                          target:self.navigationItem.rightBarButtonItem.target
-                                                                          action:self.navigationItem.rightBarButtonItem.action];
         
+        _addBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action: @selector(addPerson:)];
     }
     return _addBarButtonItem;
 }
+
+- (void)addPerson:(UIBarButtonItem *)sender {
+    InformationViewController *informationVC = [[InformationViewController alloc] init];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self.navigationController pushViewController:informationVC animated:YES];
+        
+    });
+}
+
 
 - (UITableView *)tableView {
     if (!_tableView) {

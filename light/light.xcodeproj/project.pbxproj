@@ -15,7 +15,8 @@
 		99B79F331EBFB76600FC91E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99B79F311EBFB76600FC91E1 /* LaunchScreen.storyboard */; };
 		99B79F3C1EBFB7A700FC91E1 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 99B79F3B1EBFB7A700FC91E1 /* libsqlite3.tbd */; };
 		99B79F441EBFBA2800FC91E1 /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 99B79F431EBFBA2800FC91E1 /* DBManager.m */; };
-		99B79F481EBFE34500FC91E1 /* sampleDB.sql in Resources */ = {isa = PBXBuildFile; fileRef = 99B79F471EBFE34500FC91E1 /* sampleDB.sql */; };
+		99B79F511EC0301200FC91E1 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99B79F501EC0301200FC91E1 /* InformationViewController.m */; };
+		99B79F571EC0D14E00FC91E1 /* sampleDB.sql in Resources */ = {isa = PBXBuildFile; fileRef = 99B79F561EC0D14E00FC91E1 /* sampleDB.sql */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,7 +33,9 @@
 		99B79F3B1EBFB7A700FC91E1 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		99B79F421EBFBA2800FC91E1 /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
 		99B79F431EBFBA2800FC91E1 /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
-		99B79F471EBFE34500FC91E1 /* sampleDB.sql */ = {isa = PBXFileReference; lastKnownFileType = file; name = sampleDB.sql; path = ../../sampleDB.sql; sourceTree = "<group>"; };
+		99B79F4F1EC0301200FC91E1 /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationViewController.h; sourceTree = "<group>"; };
+		99B79F501EC0301200FC91E1 /* InformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InformationViewController.m; sourceTree = "<group>"; };
+		99B79F561EC0D14E00FC91E1 /* sampleDB.sql */ = {isa = PBXFileReference; lastKnownFileType = file; path = sampleDB.sql; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,7 +76,9 @@
 				99B79F2A1EBFB76600FC91E1 /* ViewController.m */,
 				99B79F421EBFBA2800FC91E1 /* DBManager.h */,
 				99B79F431EBFBA2800FC91E1 /* DBManager.m */,
-				99B79F471EBFE34500FC91E1 /* sampleDB.sql */,
+				99B79F4F1EC0301200FC91E1 /* InformationViewController.h */,
+				99B79F501EC0301200FC91E1 /* InformationViewController.m */,
+				99B79F561EC0D14E00FC91E1 /* sampleDB.sql */,
 				99B79F2C1EBFB76600FC91E1 /* Main.storyboard */,
 				99B79F2F1EBFB76600FC91E1 /* Assets.xcassets */,
 				99B79F311EBFB76600FC91E1 /* LaunchScreen.storyboard */,
@@ -159,7 +164,7 @@
 			files = (
 				99B79F331EBFB76600FC91E1 /* LaunchScreen.storyboard in Resources */,
 				99B79F301EBFB76600FC91E1 /* Assets.xcassets in Resources */,
-				99B79F481EBFE34500FC91E1 /* sampleDB.sql in Resources */,
+				99B79F571EC0D14E00FC91E1 /* sampleDB.sql in Resources */,
 				99B79F2E1EBFB76600FC91E1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -171,6 +176,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99B79F511EC0301200FC91E1 /* InformationViewController.m in Sources */,
 				99B79F2B1EBFB76600FC91E1 /* ViewController.m in Sources */,
 				99B79F281EBFB76600FC91E1 /* AppDelegate.m in Sources */,
 				99B79F251EBFB76600FC91E1 /* main.m in Sources */,
