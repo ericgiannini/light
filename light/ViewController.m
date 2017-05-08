@@ -8,10 +8,11 @@
 
 #import "ViewController.h"
 #import "InformationViewController.h"
+#import "DBManager.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) DBManager *dbManager;
 
 @property (nonatomic, strong) NSMutableArray *tableData;
 
@@ -25,13 +26,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.tableData = [[NSMutableArray alloc] initWithObjects:@"item one", @"item two", @"item three", @"item four", @"item five", @"item six", nil];
+    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"sampledb.sql"];
+    
+//    self.tableData = [[NSMutableArray alloc] initWithObjects:@"item one", @"item two", @"item three", @"item four", @"item five", @"item six", nil];
     
     self.navigationItem.rightBarButtonItem = self.addBarButtonItem;
     
     self.navigationController.navigationBar.tintColor = self.navigationItem.rightBarButtonItem.tintColor;
 
-    
+    [self loadData];
     [_tableView reloadData];
     
     [self.view addSubview:self.tableView];
@@ -51,6 +54,19 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)loadData{
+    // Form the query.
+    NSString *query = @"select * from person";
+    
+    // Get the results.
+    if (self.tableData != nil) {
+        self.tableData = nil;
+    }
+    self.tableData = [[NSMutableArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+    
+    // Reload the table view.
+    [self.tableView reloadData];
+}
 
 
 - (UIBarButtonItem *)addBarButtonItem {
@@ -68,7 +84,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [self.navigationController pushViewController:informationVC animated:YES];
-        
     });
 }
 
@@ -103,11 +118,24 @@
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    cell.textLabel.text = [self.tableData objectAtIndex:indexPath.row];
+    
+    NSInteger indexOfFirstname = [self.dbManager.arrColumnNames indexOfObject:@"firstname"];
+    NSInteger indexOfLastname = [self.dbManager.arrColumnNames indexOfObject:@"lastname"];
+    NSInteger indexOfAge = [self.dbManager.arrColumnNames indexOfObject:@"age"];
+    
+    // Set the loaded data to the appropriate cell labels.
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[self.tableData objectAtIndex:indexPath.row] objectAtIndex:indexOfFirstname], [[self.tableData objectAtIndex:indexPath.row] objectAtIndex:indexOfLastname]];
+    
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Age: %@", [[self.tableData objectAtIndex:indexPath.row] objectAtIndex:indexOfAge]];
+    
+//    cell.textLabel.text = [self.tableData objectAtIndex:indexPath.row];
     
     return cell;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 60.0;
+}
 
 
 @end

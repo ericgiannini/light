@@ -27,7 +27,7 @@
     [super viewDidLoad];
     
     //the database class will check if the sampledb.sql file exists or not in the documents directory, and it will copy it there if not found.
-    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"sampleDB.sql"];
+    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"sampledb.sql"];
     
     self.navigationItem.rightBarButtonItem = self.saveBarButtonItem;
     
@@ -105,7 +105,26 @@
     return _saveBarButtonItem;
 }
 
--(void)save:(id)sender{};
+-(void)save:(UIBarButtonItem *)sender{
+
+    // Prepare the query string.
+    NSString *query = [NSString stringWithFormat:@"insert into person values(null, '%@', '%@', %d)", self.nameTextField.text, self.lastNameTextField.text, [self.ageTextField.text intValue]];
+    
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    // If the query was successfully executed then pop the view controller.
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        
+        // Pop the view controller.
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else{
+        NSLog(@"Could not execute the query.");
+    }
+
+}
 
 // MARK: - UITextFieldDelegate methods
 
