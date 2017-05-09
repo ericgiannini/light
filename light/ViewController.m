@@ -87,7 +87,7 @@
         
     });
     
-    informationVC.delegate = self; 
+//    informationVC.delegate = self; 
     
 }
 
