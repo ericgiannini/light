@@ -7,10 +7,9 @@
 //
 
 #import "ViewController.h"
-#import "InformationViewController.h"
 #import "DBManager.h"
 
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ViewController () <UITableViewDataSource, UITableViewDelegate, InformationViewControllerDelegate>
 
 @property (nonatomic, strong) DBManager *dbManager;
 
@@ -35,6 +34,7 @@
     self.navigationController.navigationBar.tintColor = self.navigationItem.rightBarButtonItem.tintColor;
 
     [self loadData];
+    
     [_tableView reloadData];
     
     [self.view addSubview:self.tableView];
@@ -45,8 +45,8 @@
     
     [super viewWillAppear:YES];
     
-//    [self.addBarButtonItem setAction:@selector(addPerson:)];
-
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -84,7 +84,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [self.navigationController pushViewController:informationVC animated:YES];
+        
     });
+    
+    informationVC.delegate = self; 
+    
 }
 
 
@@ -136,6 +140,14 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 60.0;
 }
+
+
+-(void)editingInfoWasFinished{
+    // Reload the data.
+    [self loadData];
+}
+
+
 
 
 @end
