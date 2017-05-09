@@ -49,18 +49,18 @@
     }
 }
 
-//-(void)loadInfoToEdit {
-//    // Create the query.
-//    NSString *query = [NSString stringWithFormat:@"select * from person where person=%d", self.recordIDToEdit];
-//    
-//    // Load the relevant data.
-//    NSArray *results = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
-//    
-//    // Set the loaded data to the textfields.
-//    self.nameTextField.text = [[results objectAtIndex:0] objectAtIndex:[self.dbManager.arrColumnNames indexOfObject:@"firstname"]];
-//    self.lastNameTextField.text = [[results objectAtIndex:0] objectAtIndex:[self.dbManager.arrColumnNames indexOfObject:@"lastname"]];
-//    self.ageTextField.text = [[results objectAtIndex:0] objectAtIndex:[self.dbManager.arrColumnNames indexOfObject:@"age"]];
-//};
+-(void)loadInfoToEdit {
+    // Create the query.
+    NSString *query = [NSString stringWithFormat:@"select * from person where personID=%d", self.recordIDToEdit];
+    
+    // Load the relevant data.
+    NSArray *results = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
+    
+    // Set the loaded data to the textfields.
+    self.nameTextField.text = [[results objectAtIndex:0] objectAtIndex:[self.dbManager.arrColumnNames indexOfObject:@"firstname"]];
+    self.lastNameTextField.text = [[results objectAtIndex:0] objectAtIndex:[self.dbManager.arrColumnNames indexOfObject:@"lastname"]];
+    self.ageTextField.text = [[results objectAtIndex:0] objectAtIndex:[self.dbManager.arrColumnNames indexOfObject:@"age"]];
+};
 
 // MARK: - Lazily Initialize instnaces of UITextField, UIBarButtonItem
 
@@ -124,9 +124,16 @@
 // MARK: - UIBarButtonItem method
 
 -(void)save:(UIBarButtonItem *)sender{
-    
+
     // Prepare the query string.
-    NSString *query = [NSString stringWithFormat:@"insert into person values(null, '%@', '%@', %d)", self.nameTextField.text, self.lastNameTextField.text, [self.ageTextField.text intValue]];
+    // If the recordIDToEdit property has value other than -1, then create an update query. Otherwise create an insert query.
+    NSString *query;
+    if (self.recordIDToEdit == -1) {
+        query = [NSString stringWithFormat:@"insert into person values(null, '%@', '%@', %d)", self.nameTextField.text, self.lastNameTextField.text, [self.ageTextField.text intValue]];
+    }
+    else{
+        query = [NSString stringWithFormat:@"update person set firstname='%@', lastname='%@', age=%d where personID=%d", self.nameTextField.text, self.lastNameTextField.text, self.ageTextField.text.intValue, self.recordIDToEdit];
+    }
     
     // Execute the query.
     [self.dbManager executeQuery:query];
@@ -168,11 +175,11 @@
     
     [self layoutTextFields];
     
-//    // Check if should load specific record for editing.
-//    if (self.recordIDToEdit != -1) {
-//        // Load the record with the specific ID from the database.
-//        [self loadInfoToEdit];
-//    }
+    // Check if should load specific record for editing.
+    if (self.recordIDToEdit != -1) {
+        // Load the record with the specific ID from the database.
+        [self loadInfoToEdit];
+    }
     
 }
 

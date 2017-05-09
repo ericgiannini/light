@@ -16,43 +16,16 @@
 @property (nonatomic, strong) NSMutableArray *tableData;
 
 @property (nonatomic, strong) UIBarButtonItem *addBarButtonItem;
+//@property (nonatomic, strong) UIBarButtonItem *editBarButtonItem;
+
+@property (nonatomic) int recordIDToEdit;
+
+
 
 @end
 
 @implementation ViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    
-    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"sampledb.sql"];
-    
-//    self.tableData = [[NSMutableArray alloc] initWithObjects:@"item one", @"item two", @"item three", @"item four", @"item five", @"item six", nil];
-    
-    self.navigationItem.rightBarButtonItem = self.addBarButtonItem;
-    
-    self.navigationController.navigationBar.tintColor = self.navigationItem.rightBarButtonItem.tintColor;
-
-    [self loadData];
-    
-    [_tableView reloadData];
-    
-    [self.view addSubview:self.tableView];
-    
-}
-
--(void)viewWillAppear:(BOOL)animated {
-    
-    [super viewWillAppear:YES];
-    
-    
-    
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 -(void)loadData{
     // Form the query.
@@ -87,7 +60,34 @@
         
     });
     
-    informationVC.delegate = self; 
+    informationVC.delegate = self;
+    self.recordIDToEdit = -1;
+    informationVC.recordIDToEdit = self.recordIDToEdit;
+
+    
+}
+
+//- (UIBarButtonItem *)editBarButtonItem {
+//    
+//    if (!_editBarButtonItem) {
+//        
+//        _editBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action: @selector(editPerson:)];
+//    }
+//    return _editBarButtonItem;
+//}
+
+- (void)editPerson:(id)sender {
+    InformationViewController *informationVC = [[InformationViewController alloc] init];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self.navigationController pushViewController:informationVC animated:YES];
+        
+    });
+    
+    informationVC.delegate = self;
+    informationVC.recordIDToEdit = self.recordIDToEdit;
+
     
 }
 
@@ -108,7 +108,23 @@
     return _tableView;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+// MARK: - UITableViewDelegate methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Get the record ID of the selected name and set it to the recordIDToEdit property.
+    self.recordIDToEdit = [[[self.tableData objectAtIndex:indexPath.row] objectAtIndex:0] intValue];
+    
+    [self editPerson:nil];
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 60.0;
+}
+
+// MARK: - UITableViewDataSource methods
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.tableData count];
 }
 
@@ -137,17 +153,48 @@
     return cell;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 60.0;
-}
 
+// MARK: - InformationViewControllerDelegate methods
 
 -(void)editingInfoWasFinished{
     // Reload the data.
     [self loadData];
 }
 
+// MARK: - lifecycle of view
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+    
+    self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"sampledb.sql"];
+    
+    //    self.tableData = [[NSMutableArray alloc] initWithObjects:@"item one", @"item two", @"item three", @"item four", @"item five", @"item six", nil];
+    
+    self.navigationItem.rightBarButtonItem = self.addBarButtonItem;
+//    self.navigationItem.leftBarButtonItem = self.editBarButtonItem;
+    
+    self.navigationController.navigationBar.tintColor = self.navigationItem.rightBarButtonItem.tintColor;
+    
+    [self loadData];
+    
+    [_tableView reloadData];
+    
+    [self.view addSubview:self.tableView];
+    
+}
 
+- (void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:YES];
+    
+    
+    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
 @end
