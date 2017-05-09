@@ -118,6 +118,28 @@
     
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        // Delete the selected record.
+        // Find the record ID.
+        
+        int recordIDToDelete = [[[self.tableData objectAtIndex:indexPath.row] objectAtIndex:0] intValue];
+        
+        // Prepare the query
+        NSString *query = [NSString stringWithFormat:@"delete from person where personID=%d", recordIDToDelete];
+        
+        // Execute the query
+        [self.dbManager executeQuery:query];
+        
+        // Reload the table view.
+        [self loadData];
+        
+    }
+    
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 60.0;
 }
