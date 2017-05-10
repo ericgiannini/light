@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>light - Swift.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>light.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>997B88C01EC26D8600CECE63</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>99B79F1F1EBFB76600FC91E1</key>
 		<dict>
 			<key>primary</key>

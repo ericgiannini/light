@@ -50,15 +50,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		997B88D31EC26D9F00CECE63 /* database */ = {
+			isa = PBXGroup;
+			children = (
+				99B79F581EC0E6A200FC91E1 /* sampledb.sql */,
+				99B79F421EBFBA2800FC91E1 /* DBManager.h */,
+				99B79F431EBFBA2800FC91E1 /* DBManager.m */,
+			);
+			name = database;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		99B79F171EBFB76500FC91E1 = {
 			isa = PBXGroup;
 			children = (
-				99B79F421EBFBA2800FC91E1 /* DBManager.h */,
-				99B79F431EBFBA2800FC91E1 /* DBManager.m */,
-				99B79F581EC0E6A200FC91E1 /* sampledb.sql */,
 				99B79F221EBFB76600FC91E1 /* light */,
-				99B79F211EBFB76600FC91E1 /* Products */,
-				99B79F3A1EBFB7A700FC91E1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -68,11 +74,15 @@
 				99B79F201EBFB76600FC91E1 /* light.app */,
 			);
 			name = Products;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		99B79F221EBFB76600FC91E1 /* light */ = {
 			isa = PBXGroup;
 			children = (
+				99B79F3A1EBFB7A700FC91E1 /* Frameworks */,
+				99B79F211EBFB76600FC91E1 /* Products */,
+				997B88D31EC26D9F00CECE63 /* database */,
 				99B79F261EBFB76600FC91E1 /* AppDelegate.h */,
 				99B79F271EBFB76600FC91E1 /* AppDelegate.m */,
 				99B79F291EBFB76600FC91E1 /* ViewController.h */,
@@ -102,6 +112,7 @@
 				99B79F3B1EBFB7A700FC91E1 /* libsqlite3.tbd */,
 			);
 			name = Frameworks;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,6 +141,7 @@
 		99B79F181EBFB76500FC91E1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0810;
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Unicorn Mobile, LLC";
 				TargetAttributes = {
